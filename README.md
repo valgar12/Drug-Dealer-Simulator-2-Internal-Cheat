@@ -12,7 +12,10 @@ Tested on singleplayer, not tested on coop
 
 To compile, first extract SDK.rar
 
+My discord: valgar1
+
 ## --SHOWCASE--
+https://www.youtube.com/watch?v=DsF6tQR9T9Q&ab_channel=Valgar1
 
 ## --FEATURES--
 ### -ESP
