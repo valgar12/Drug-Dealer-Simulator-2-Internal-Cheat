@@ -10,6 +10,8 @@ Tested on singleplayer, not tested on coop
 # End to uninject
 # It may have some crash issues, dont spam teleports or other exploits
 
+To compile, first extract SDK.rar
+
 ## --SHOWCASE--
 
 ## --FEATURES--
