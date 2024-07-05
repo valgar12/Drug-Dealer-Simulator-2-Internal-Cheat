@@ -91,5 +91,5 @@ https://www.youtube.com/watch?v=DsF6tQR9T9Q&ab_channel=Valgar1
 - Draw crosshair
 
 ## Credits
-https://github.com/rdbo/ImGui-DirectX-11-Kiero-Hook
-https://github.com/Encryqed/Dumper-7
+- https://github.com/rdbo/ImGui-DirectX-11-Kiero-Hook
+- https://github.com/Encryqed/Dumper-7
