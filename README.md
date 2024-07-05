@@ -28,9 +28,9 @@ Tested on singleplayer, not tested on coop
 - Influencers
 ### -Aimbot
 - KEY (XBUTTON2)
--F OV slider
+- FOV slider
 - Smooth slider
--V isibility check
+- Visibility check
 ### -Exploits
 - Unlimited stamina
 - God mode
