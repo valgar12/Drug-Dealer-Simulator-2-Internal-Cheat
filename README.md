@@ -5,6 +5,7 @@ Tested on singleplayer, not tested on coop
 
 ## --IMPORTANT--
 # You must launch the game in directx11 and play on windowed fullscreen
+# to launch the game in DirectX11, launch the game in steam and select the directx11 option
 # Use any injector, i recommend process hacker
 # Insert to open/close the menu
 # End to uninject
