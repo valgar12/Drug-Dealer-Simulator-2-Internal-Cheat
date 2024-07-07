@@ -11,6 +11,39 @@ Tested on singleplayer, not tested on coop
 # End to uninject
 # It may have some crash issues, dont spam teleports or other exploits
 
+## --VERSIONS--
+# V.2
+Added:
+-ESP for Militia
+
+World ESP:
+- Vehicles
+- Vehicles All
+- Boats
+- Influencers
+- Shops
+- Parkings
+- Bus Stops
+- Dealers Spots
+- Drop bags
+- Hideouts Owned
+- Hideouts All
+- Intelligence loot spots
+- Clients spawn
+- Hideouts trash bins
+- Clients
+- Map markers
+
+Exploits:
+- Increese interaction range
+- All enemies 0 HP
+- Start Raid
+- Show Credits
+- Increese Max Players (1-10)
+
+Teleport:
+- Reorganized the TPS into more widgets
+
 To compile, first extract SDK.rar
 
 My discord: valgar1
