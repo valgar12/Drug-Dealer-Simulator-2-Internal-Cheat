@@ -43,6 +43,12 @@ inline void DrawMenu()
 					ImGui::SameLine();
 					ImGui::ColorEdit3("##Thugs color", (float*)&gl::esp_Colors::ThugColor, ImGuiColorEditFlags_NoInputs);
 				}
+				ImGui::Checkbox("Militia", &gl::ESP::Militia);
+				if (gl::ESP::Militia)
+				{
+					ImGui::SameLine();
+					ImGui::ColorEdit3("##Militia color", (float*)&gl::esp_Colors::MilitiaColor, ImGuiColorEditFlags_NoInputs);
+				}
 			}
 
 			ImGui::EndTabItem();
@@ -52,10 +58,57 @@ inline void DrawMenu()
 			ImGui::Text("WORLD ESP");
 			ImGui::Separator();
 			ImGui::Checkbox("World ESP", &gl::World::World);
+			ImGui::Separator();
+			ImGui::SliderInt("Max Distance Render", &gl::World::MaxDistance, 5, 3000);
+			ImGui::Separator();
 			ImGui::Checkbox("Vehicles", &gl::World::Vehicles);
+			ImGui::SameLine();
+			ImGui::ColorEdit3("##Vehicles color", (float*)&gl::esp_Colors::Vehicles, ImGuiColorEditFlags_NoInputs);
+			ImGui::Checkbox("Vehicles All", &gl::World::VehiclesAll);
+			ImGui::SameLine();
+			ImGui::ColorEdit3("##VehiclesAll color", (float*)&gl::esp_Colors::Vehicles, ImGuiColorEditFlags_NoInputs);
 			ImGui::Checkbox("Boats", &gl::World::Boats);
-			//ImGui::Checkbox("Shops", &gl::World::Shops);
+			ImGui::SameLine();
+			ImGui::ColorEdit3("##Boats color", (float*)&gl::esp_Colors::Boats, ImGuiColorEditFlags_NoInputs);
 			ImGui::Checkbox("Influencers", &gl::World::Influencers);
+			ImGui::SameLine();
+			ImGui::ColorEdit3("##Influencers color", (float*)&gl::esp_Colors::Influencers, ImGuiColorEditFlags_NoInputs);
+			ImGui::Checkbox("Trash Bins", &gl::World::HideoutsBins);
+			ImGui::SameLine();
+			ImGui::ColorEdit3("##Trash color", (float*)&gl::esp_Colors::HideoutsBins, ImGuiColorEditFlags_NoInputs);
+			ImGui::Checkbox("Shops", &gl::World::Shops);
+			ImGui::SameLine();
+			ImGui::ColorEdit3("##Shops color", (float*)&gl::esp_Colors::Shops, ImGuiColorEditFlags_NoInputs);
+			ImGui::Checkbox("Hideouts All", &gl::World::HideoutsAll);
+			ImGui::SameLine();
+			ImGui::ColorEdit3("##HideoutsAll color", (float*)&gl::esp_Colors::HideoutsAll, ImGuiColorEditFlags_NoInputs);
+			ImGui::Checkbox("Hideouts Owned", &gl::World::HideoutsOwned);
+			ImGui::SameLine();
+			ImGui::ColorEdit3("##HideoutsOwned color", (float*)&gl::esp_Colors::HideoutsOwned, ImGuiColorEditFlags_NoInputs);
+			ImGui::Checkbox("Parkings", &gl::World::Parkings);
+			ImGui::SameLine();
+			ImGui::ColorEdit3("##Parkings color", (float*)&gl::esp_Colors::Parkings, ImGuiColorEditFlags_NoInputs);
+			ImGui::Checkbox("Bus Stops", &gl::World::BusStops);
+			ImGui::SameLine();
+			ImGui::ColorEdit3("##Bus color", (float*)&gl::esp_Colors::BusStops, ImGuiColorEditFlags_NoInputs);
+			ImGui::Checkbox("Drop Bags", &gl::World::DropBags);
+			ImGui::SameLine();
+			ImGui::ColorEdit3("##Drop color", (float*)&gl::esp_Colors::DropBags, ImGuiColorEditFlags_NoInputs);
+			ImGui::Checkbox("Dealers Spots", &gl::World::Dealers);
+			ImGui::SameLine();
+			ImGui::ColorEdit3("##Dealers color", (float*)&gl::esp_Colors::Dealers, ImGuiColorEditFlags_NoInputs);
+			ImGui::Checkbox("Client Spawns", &gl::World::ClientSpawn);
+			ImGui::SameLine();
+			ImGui::ColorEdit3("##ClientSpawn color", (float*)&gl::esp_Colors::ClientSpawn, ImGuiColorEditFlags_NoInputs);
+			ImGui::Checkbox("Clients", &gl::World::Clients);
+			ImGui::SameLine();
+			ImGui::ColorEdit3("##Client color", (float*)&gl::esp_Colors::Clients, ImGuiColorEditFlags_NoInputs);
+			ImGui::Checkbox("Intelligence Loot Spots", &gl::World::IntelligenceSpots);
+			ImGui::SameLine();
+			ImGui::ColorEdit3("##Intelligence color", (float*)&gl::esp_Colors::IntelligenceSpots, ImGuiColorEditFlags_NoInputs);
+			ImGui::Checkbox("Map Markers", &gl::World::MapMarkers);
+			ImGui::SameLine();
+			ImGui::ColorEdit3("##MapMArkers color", (float*)&gl::esp_Colors::MapMarkers, ImGuiColorEditFlags_NoInputs);
 
 			ImGui::EndTabItem();
 		}
@@ -76,6 +129,9 @@ inline void DrawMenu()
 		}
 		if (ImGui::BeginTabItem("Exploits"))
 		{
+			ImGui::Separator();
+			ImGui::SliderInt("Max Speed", &gl::Exploits::MaxSpeed, 100, 10000);
+			ImGui::Separator();
 			ImGui::Checkbox("Unlimited Stamina", &gl::Exploits::InfiniteStamina);
 			ImGui::Checkbox("Super Speed", &gl::Exploits::SuperSpeed);
 			ImGui::Checkbox("Fast swim", &gl::Exploits::FastSwim);
@@ -83,9 +139,11 @@ inline void DrawMenu()
 			ImGui::Checkbox("Fast Acceleration", &gl::Exploits::FastAcceleration);
 			ImGui::Checkbox("Super Jump", &gl::Exploits::SuperJump);
 			ImGui::Checkbox("God Mode", &gl::Exploits::GodMode);
+			ImGui::Checkbox("All Enemies 0 HP", &gl::Exploits::cheats::KillAllEntityes);
 			ImGui::Checkbox("No break weapoons", &gl::Exploits::UnbreakingWeapons);
 			ImGui::Checkbox("No Weight", &gl::Exploits::NoWeight);
 			ImGui::Checkbox("Fast Melee Atack", &gl::Exploits::FastMeleeAtack);
+			ImGui::Checkbox("Increese Interaction Range", &gl::Exploits::IncreeseInteractRange);
 			ImGui::Checkbox("Infinite Fuel", &gl::Exploits::InfiniteFuel);
 			ImGui::Checkbox("Super Flashlight", &gl::Exploits::SuperFlashlight);
 			if (gl::Exploits::SuperFlashlight)
@@ -177,9 +235,25 @@ inline void DrawMenu()
 			{
 				gl::Exploits::cheats::GiveStreetCreed = true;
 			}
+			ImGui::SameLine();
 			if (ImGui::Button("Clean All Hideouts Bins", ImVec2(280, 30)))
 			{
 				gl::Exploits::cheats::CleanTrashBins = true;
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Start Raid", ImVec2(150, 30)))
+			{
+				gl::Exploits::cheats::StartRaid = true;
+			}
+			if (ImGui::Button("Show Credits", ImVec2(150, 30)))
+			{
+				gl::Exploits::cheats::ShowCredits = true;
+			}
+			ImGui::Separator();
+			ImGui::SliderInt("Max Players", &gl::Exploits::MaxPlayers, 1, 10);
+			if (ImGui::Button("Increese max players", ImVec2(280, 30)))
+			{
+				ConsoleComponnent->OverridePlayerLimit(gl::Exploits::MaxPlayers);
 			}
 
 			ImGui::EndTabItem();
@@ -440,6 +514,61 @@ inline void DrawMenu()
 			ImGui::Separator();
 			ImGui::Text("Map Markers");
 			ImGui::Separator();
+			ImGui::Separator();
+			ImGui::Text("SHOPS");
+			ImGui::Separator();
+
+			if (gl::TP::MapMarkersShops.size() > 0)
+			{
+				for (int i = 0; i < gl::TP::MapMarkersShops.size(); i++)
+				{
+					if (i % 7 != 0)
+					{
+						ImGui::SameLine();
+					}
+
+					if (gl::TP::MapMarkersShops[i])
+					{
+						auto MapMarker = reinterpret_cast<SDK::ABP_WorldLocationMapMarker_C*>(gl::TP::MapMarkersShops[i]);
+
+						if (ImGui::Button(MapMarker->StaticLocationID.ToString().c_str(), ImVec2(170, 30)))
+						{
+							gl::TP::PosForTP = gl::TP::MapMarkersShops[i]->RootComponent->RelativeLocation;
+							gl::TP::TeleportDefault = true;
+						}
+					}
+				}
+			}
+
+			ImGui::Separator();
+			ImGui::Text("Partys");
+			ImGui::Separator();
+
+			if (gl::TP::MapMarkersPartys.size() > 0)
+			{
+				for (int i = 0; i < gl::TP::MapMarkersPartys.size(); i++)
+				{
+					if (i % 7 != 0)
+					{
+						ImGui::SameLine();
+					}
+
+					if (gl::TP::MapMarkersPartys[i])
+					{
+						auto MapMarker = reinterpret_cast<SDK::ABP_WorldLocationMapMarker_C*>(gl::TP::MapMarkersPartys[i]);
+
+						if (ImGui::Button(MapMarker->StaticLocationID.ToString().c_str(), ImVec2(170, 30)))
+						{
+							gl::TP::PosForTP = gl::TP::MapMarkersPartys[i]->RootComponent->RelativeLocation;
+							gl::TP::TeleportDefault = true;
+						}
+					}
+				}
+			}
+
+			ImGui::Separator();
+			ImGui::Text("Random");
+			ImGui::Separator();
 
 			if (gl::TP::MapMarkers.size() > 0)
 			{
@@ -456,12 +585,13 @@ inline void DrawMenu()
 
 						if (ImGui::Button(MapMarker->StaticLocationID.ToString().c_str(), ImVec2(170, 30)))
 						{
-							gl::TP::PosForTP = gl::TP::MapMarkers[i]->K2_GetActorLocation();
+							gl::TP::PosForTP = gl::TP::MapMarkers[i]->RootComponent->RelativeLocation;
 							gl::TP::TeleportDefault = true;
 						}
 					}
 				}
 			}
+
 			ImGui::Separator();
 			ImGui::Text("Vehicles");
 			ImGui::Separator();
@@ -491,7 +621,7 @@ inline void DrawMenu()
 
 					if (ImGui::Button(VehicleName.c_str(), ImVec2(120, 30)))
 					{
-						gl::TP::PosForTP = gl::TP::OwnedVehicles[i]->K2_GetActorLocation();
+						gl::TP::PosForTP = gl::TP::OwnedVehicles[i]->RootComponent->RelativeLocation;
 						gl::TP::TeleportDefault = true;
 					}
 				}
@@ -499,28 +629,26 @@ inline void DrawMenu()
 			ImGui::Separator();
 			ImGui::Text("Hideouts Owned");
 			ImGui::Separator();
-			if (gl::TP::Hideouts.size() > 0)
+			if (gl::TP::HideoutsOwned.size() > 0)
 			{
-				for (int i = 0; i < gl::TP::Hideouts.size(); i++)
+				for (int i = 0; i < gl::TP::HideoutsOwned.size(); i++)
 				{
-					if (i % 2 != 0)
+					if (i % 4 != 0)
 					{
 						ImGui::SameLine();
 					}
 
-					auto Hideout = reinterpret_cast<SDK::ABP_HideoutMaster_C*>(gl::TP::Hideouts[i]);
-
-					if (Hideout->HideoutOwned == false) continue;
+					auto Hideout = reinterpret_cast<SDK::ABP_HideoutMaster_C*>(gl::TP::HideoutsOwned[i]);
 
 					if (ImGui::Button(Hideout->HideoutID.ToString().c_str(), ImVec2(170, 30)))
 					{
-						gl::TP::PosForTP = gl::TP::Hideouts[i]->K2_GetActorLocation();
+						gl::TP::PosForTP = gl::TP::HideoutsOwned[i]->RootComponent->RelativeLocation;
 						gl::TP::TeleportDefault = true;
 					}
 				}
 			}
 			ImGui::Separator();
-			ImGui::Text("Hideouts All");
+			ImGui::Text("Hideouts Not Owned");
 			ImGui::Separator();
 			if (gl::TP::Hideouts.size() > 0)
 			{
@@ -535,7 +663,7 @@ inline void DrawMenu()
 
 					if (ImGui::Button(Hideout->HideoutID.ToString().c_str(), ImVec2(170, 30)))
 					{
-						gl::TP::PosForTP = gl::TP::Hideouts[i]->K2_GetActorLocation();
+						gl::TP::PosForTP = gl::TP::Hideouts[i]->RootComponent->RelativeLocation;
 						gl::TP::TeleportDefault = true;
 					}
 				}

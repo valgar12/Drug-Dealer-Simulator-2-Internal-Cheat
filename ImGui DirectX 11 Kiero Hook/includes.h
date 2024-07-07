@@ -14,6 +14,7 @@
 #include "GUI.h";
 #include "PlayerCache.h"
 #include "ActorsCache.h"
+#include "ActorsCacheFast.h"
 #include "GameLoop.h"
 
 

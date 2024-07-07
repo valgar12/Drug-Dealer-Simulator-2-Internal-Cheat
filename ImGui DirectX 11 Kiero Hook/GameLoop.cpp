@@ -1,6 +1,105 @@
 #include "GameLoop.h"
 #include "SDK.hpp"
 
+void ShowWorldESP(std::vector<SDK::AActor*>& ActorsVector, SDK::APlayerController* MyController, const char* text, ImColor color, SDK::FVector LocalPos, bool Clients = false)
+{
+	if (ActorsVector.size() > 0)
+	{
+		for (int l = 0; l < ActorsVector.size(); l++)
+		{
+			if (l >= ActorsVector.size()) break;
+			if (!ActorsVector[l]) continue;
+
+			if (!ActorsVector[l]->RootComponent) continue;
+
+			if (ActorsVector[l]->RootComponent->RelativeLocation.IsZero()) continue;
+
+
+			auto location = ActorsVector[l]->RootComponent->RelativeLocation;
+
+			auto ActorDistance = LocalPos.GetDistanceToInMeters(location);
+
+			if (ActorDistance > gl::World::MaxDistance) continue;
+
+			if (Clients)
+			{
+				if (gl::TP::WorkSpots.size() > 0)
+				{
+					for (int i = 0; i < gl::TP::WorkSpots.size(); i++)
+					{
+						if (i >= gl::TP::WorkSpots.size()) break;
+						if (!gl::TP::WorkSpots[i]) continue;
+
+						if (!gl::TP::WorkSpots[i]->RootComponent) continue;
+						if (gl::TP::WorkSpots[i]->RootComponent->RelativeLocation.IsZero()) continue;
+
+						auto SpotLocation = gl::TP::WorkSpots[i]->RootComponent->RelativeLocation;
+
+						auto DistanceToClient = SpotLocation.GetDistanceToInMeters(location);
+
+						if (DistanceToClient <= 3)
+						{
+							if (gl::TP::DealersSpots.size() > 0)
+							{
+								bool Draw = false;
+
+								for (int k = 0; k < gl::TP::DealersSpots.size(); k++)
+								{
+									if (k >= gl::TP::DealersSpots.size()) break;
+									if (!gl::TP::DealersSpots[k]) continue;
+
+									if (!gl::TP::DealersSpots[k]->RootComponent) continue;
+									if (gl::TP::DealersSpots[k]->RootComponent->RelativeLocation.IsZero()) continue;
+
+									auto DealerLocation = gl::TP::DealersSpots[k]->RootComponent->RelativeLocation;
+
+									auto DistanceToDealer = DealerLocation.GetDistanceToInMeters(SpotLocation);
+
+									if (DistanceToDealer <= 20)
+									{
+										Draw = true;
+										break;
+									}
+								}
+
+								if (Draw)
+								{
+									break;
+								}
+								else
+								{
+									SDK::FVector2D Pos2D{};
+
+									if (MyController->ProjectWorldLocationToScreen(location, &Pos2D, false))
+									{
+										ESP::DrawText2(Vec2(Pos2D.X, Pos2D.Y), color, text);
+										break;
+									}
+								}
+							}
+
+
+
+							
+						}
+					}
+				}
+			}
+			else
+			{
+				SDK::FVector2D Pos2D{};
+
+				if (MyController->ProjectWorldLocationToScreen(location, &Pos2D, false))
+				{
+					ESP::DrawText2(Vec2(Pos2D.X, Pos2D.Y), color, text);
+				}
+			}
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------------
+
 void GameLoop()
 {
 	if (PlayerList.size() > 0)
@@ -10,11 +109,38 @@ void GameLoop()
 		SDK::AActor* closest_actor{};
 		SDK::FRotator closest_actor_rotation{};
 
+		int IndexForWorldESP = 0;
+
+		CheatRunning = true;
+
+		while (CacheRunning || FastCacheRunning || MainCacheRunning)
+		{
+			std::this_thread::sleep_for(std::chrono::nanoseconds(1));
+		}
+
 		for (int i = 0; i < PlayerList.size(); i++)
 		{
-			if (i > PlayerList.size()) break;
+			while (CacheRunning || FastCacheRunning || MainCacheRunning)
+			{
+				std::this_thread::sleep_for(std::chrono::nanoseconds(1));
+			}
+
+			if (i >= PlayerList.size()) break;
+			if (!PlayerList[i]) continue;
+
 
 			SDK::AActor* actor = PlayerList[i];
+
+			if (!actor->RootComponent) continue;
+			if (actor->RootComponent->RelativeLocation.IsZero()) continue;
+
+			while (CacheRunning || FastCacheRunning || MainCacheRunning)
+			{
+				std::this_thread::sleep_for(std::chrono::nanoseconds(1));
+			}
+
+			/*if (!actor->Instigator) continue;
+			if (!actor->Instigator->PlayerState) continue;*/
 
 			auto ActorState = actor->Instigator->PlayerState;
 
@@ -28,9 +154,9 @@ void GameLoop()
 
 			if (!LocalCharacter->BP_ConsoleCommandsComponent) continue;
 
-			auto ConsoleComponnent = LocalCharacter->BP_ConsoleCommandsComponent;
+			ConsoleComponnent = LocalCharacter->BP_ConsoleCommandsComponent;
 
-			auto LocalPos = LocalCharacter->K2_GetActorLocation();
+			auto LocalPos = LocalCharacter->RootComponent->RelativeLocation;
 
 			if (gl::TP::SaveLocation)
 			{
@@ -78,17 +204,17 @@ void GameLoop()
 			}
 			if (gl::TP::Teleport)
 			{
-				LocalCharacter->K2_TeleportTo(gl::TP::Locations[gl::TP::locations_id], LocalCharacter->K2_GetActorRotation());
+				LocalCharacter->K2_TeleportTo(gl::TP::Locations[gl::TP::locations_id], LocalCharacter->RootComponent->RelativeRotation);
 				gl::TP::Teleport = false;
 			}
 			if (gl::TP::TeleportFromSave)
 			{
-				LocalCharacter->K2_TeleportTo(gl::TP::LocationToTpFromSave, LocalCharacter->K2_GetActorRotation());
+				LocalCharacter->K2_TeleportTo(gl::TP::LocationToTpFromSave, LocalCharacter->RootComponent->RelativeRotation);
 				gl::TP::TeleportFromSave = false;
 			}
 			if (gl::TP::TeleportDefault)
 			{
-				LocalCharacter->K2_TeleportTo(gl::TP::PosForTP + SDK::FVector(0, 0, 100), LocalCharacter->K2_GetActorRotation());
+				LocalCharacter->K2_TeleportTo(gl::TP::PosForTP + SDK::FVector(0, 0, 100), LocalCharacter->RootComponent->RelativeRotation);
 				gl::TP::TeleportDefault = false;
 			}	
 
@@ -110,7 +236,7 @@ void GameLoop()
 			auto mesh = actor->Instigator->Controller->Character->Mesh;
 			if (!mesh) continue;
 
-			SDK::FVector location = actor->K2_GetActorLocation();
+			SDK::FVector location = actor->RootComponent->RelativeLocation;
 
 			float ActorDistance = LocalPos.GetDistanceToInMeters(location);
 
@@ -145,19 +271,19 @@ void GameLoop()
 			}
 			if (gl::Exploits::SuperSpeed)
 			{
-				LocalCharacter->SprintMaxSpeed = 3000;
+				LocalCharacter->SprintMaxSpeed = gl::Exploits::MaxSpeed;
 			}
 			if (gl::Exploits::FastSwim)
 			{
-				CharacterMovement->MaxSwimSpeed = 5000.f;
+				CharacterMovement->MaxSwimSpeed = gl::Exploits::MaxSpeed;
 			}
 			if (gl::Exploits::FastFly)
 			{
-				CharacterMovement->MaxFlySpeed = 5000.f;
+				CharacterMovement->MaxFlySpeed = gl::Exploits::MaxSpeed;
 			}
 			if (gl::Exploits::FastAcceleration)
 			{
-				CharacterMovement->MaxAcceleration = 5000.f;
+				CharacterMovement->MaxAcceleration = gl::Exploits::MaxSpeed;
 			}
 			if (gl::Exploits::GodMode)
 			{
@@ -168,10 +294,10 @@ void GameLoop()
 			{
 				if (GetAsyncKeyState(VK_SPACE) & 1)
 				{
-					SDK::FVector Pos = LocalCharacter->K2_GetActorLocation();
+					SDK::FVector Pos = LocalCharacter->RootComponent->RelativeLocation;
 					Pos += SDK::FVector{ 0.f, 0.f, 250.f };
 
-					LocalCharacter->K2_TeleportTo(Pos, LocalCharacter->K2_GetActorRotation());
+					LocalCharacter->K2_TeleportTo(Pos, LocalCharacter->RootComponent->RelativeRotation);
 				}
 			}
 			if (gl::Exploits::cheats::GiveMoneyInventory)
@@ -264,6 +390,16 @@ void GameLoop()
 				ConsoleComponnent->ServerCheatSetTime(24);
 				gl::Exploits::cheats::SkipDay = false;
 			}
+			if (gl::Exploits::cheats::StartRaid)
+			{
+				ConsoleComponnent->CheatStartRaid();
+				gl::Exploits::cheats::StartRaid = false;
+			}
+			if (gl::Exploits::cheats::ShowCredits)
+			{
+				LocalCharacter->ClientEndCredits();
+				gl::Exploits::cheats::ShowCredits = false;
+			}
 			if (gl::Exploits::cheats::CleanTrashBins)
 			{
 				if (gl::TP::HideoutBins.size() > 0)
@@ -278,7 +414,7 @@ void GameLoop()
 						Bin->WastePresent = false;
 					}
 				}
-				if (gl::TP::Hideouts.size() > 0)
+				if (gl::TP::HideoutsOwned.size() > 0)
 				{
 					for (int l = 0; l < gl::TP::Hideouts.size(); l++)
 					{
@@ -295,10 +431,29 @@ void GameLoop()
 
 				gl::Exploits::cheats::CleanTrashBins = false;
 			}
+			if (gl::Exploits::cheats::KillAllEntityes)
+			{
+				if (actor->GetName().find("Police") != std::string::npos
+					|| actor->GetName().find("Thug") != std::string::npos ||
+					actor->GetName().find("Militia") != std::string::npos)
+				{
+					auto OpponentClass = reinterpret_cast<SDK::ABP_NPC_OponentBase_C*>(actor);
+
+					if (ActorDistance > 100) continue;
+
+					if (OpponentClass->CurHealth <= 0) continue;
+
+					OpponentClass->CurHealth = 1;
+				}
+			}
 			//------------------------------------------------------
 			if (gl::Exploits::FastMeleeAtack)
 			{
 				LocalCharacter->AttackSpeedMultiplier = 10;
+			}
+			if (gl::Exploits::IncreeseInteractRange)
+			{
+				LocalCharacter->InteractionTraceRange = 5000;
 			}
 			if (gl::Exploits::SuperFlashlight)
 			{
@@ -389,11 +544,12 @@ void GameLoop()
 					{
 						if (actor->GetName().find("Boat") != std::string::npos)
 						{
+							if (ActorDistance > gl::World::MaxDistance) continue;
 							auto Vehicle = reinterpret_cast<SDK::AQuickTravelOwnedVehicle_C*>(actor);
 
 							if (Vehicle->CarOwned)
 							{
-								ESP::DrawText2(Vec2(Middle.X, Middle.Y), Colors::White, "Boat");
+								ESP::DrawText2(Vec2(Middle.X, Middle.Y), gl::esp_Colors::Boats, "Boat");
 								continue;
 							}
 							continue;
@@ -403,6 +559,7 @@ void GameLoop()
 					{
 						if (actor->GetName().find("Veh") != std::string::npos)
 						{
+							if (ActorDistance > gl::World::MaxDistance) continue;
 							auto Vehicle = reinterpret_cast<SDK::AQuickTravelOwnedVehicle_C*>(actor);
 							if (!Vehicle) continue;
 
@@ -410,7 +567,7 @@ void GameLoop()
 							{
 								if (actor->GetName().find("Bike") != std::string::npos)
 								{
-									ESP::DrawText2(Vec2(Middle.X, Middle.Y), Colors::White, "Bike");
+									ESP::DrawText2(Vec2(Middle.X, Middle.Y), gl::esp_Colors::Vehicles, "Bike");
 									continue;
 								}
 								else if (actor->GetName().find("Boat") != std::string::npos)
@@ -419,7 +576,7 @@ void GameLoop()
 								}
 								else
 								{
-									ESP::DrawText2(Vec2(Middle.X, Middle.Y), Colors::White, "Car");
+									ESP::DrawText2(Vec2(Middle.X, Middle.Y), gl::esp_Colors::Vehicles, "Car");
 									continue;
 								}
 							}
@@ -431,19 +588,80 @@ void GameLoop()
 					{
 						if (actor->GetName().find("Influ") != std::string::npos)
 						{
+							if (ActorDistance > gl::World::MaxDistance) continue;
 							std::string InfluencerName = GetInfluencerName(actor->GetName());
 							std::string WordToShow = "Influencer " + InfluencerName;
 
-							ESP::DrawText2(Vec2(Middle.X, Middle.Y), Colors::White, WordToShow.c_str());
+							ESP::DrawText2(Vec2(Middle.X, Middle.Y), gl::esp_Colors::Influencers, WordToShow.c_str());
 							continue;
 						}
 					}
+					if (IndexForWorldESP == 0)
+					{
+						if (gl::World::BusStops)
+						{
+							ShowWorldESP(gl::TP::BusStops, MyController, "Bus Stop", gl::esp_Colors::BusStops, LocalPos);
+						}
+						if (gl::World::Dealers)
+						{
+							ShowWorldESP(gl::TP::DealersSpots, MyController, "Delaer Spot", gl::esp_Colors::Dealers, LocalPos);
+						}
+						if (gl::World::HideoutsAll)
+						{
+							ShowWorldESP(gl::TP::Hideouts, MyController, "Not Owned Hideout", gl::esp_Colors::HideoutsAll, LocalPos);
+						}
+						if (gl::World::HideoutsOwned)
+						{
+							ShowWorldESP(gl::TP::HideoutsOwned, MyController, "Owned Hideout", gl::esp_Colors::HideoutsOwned, LocalPos);
+						}
+						if (gl::World::IntelligenceSpots)
+						{
+							ShowWorldESP(gl::TP::IntelligenbceSpot, MyController, "Intelligence Loot Spot", gl::esp_Colors::IntelligenceSpots, LocalPos);
+						}
+						if (gl::World::ClientSpawn)
+						{
+							ShowWorldESP(gl::TP::ClientsSpawnPoints, MyController, "Client Spawn", gl::esp_Colors::ClientSpawn, LocalPos);
+						}
+						if (gl::World::DropBags)
+						{
+							ShowWorldESP(gl::TP::DropBags, MyController, "Drop Bag", gl::esp_Colors::DropBags, LocalPos);
+						}
+						if (gl::World::HideoutsBins)
+						{
+							ShowWorldESP(gl::TP::HideoutBins, MyController, "Trash Bin", gl::esp_Colors::HideoutsBins, LocalPos);
+						}
+						if (gl::World::Parkings)
+						{
+							ShowWorldESP(gl::TP::Parkings, MyController, "Parking", gl::esp_Colors::Parkings, LocalPos);
+						}
+						if (gl::World::VehiclesAll)
+						{
+							ShowWorldESP(gl::TP::Vehicles, MyController, "Not Owned Vehicle", gl::esp_Colors::Vehicles, LocalPos);
+						}
+						if (gl::World::Clients)
+						{
+							ShowWorldESP(gl::TP::Clients, MyController, "Client", gl::esp_Colors::Clients, LocalPos, true);
+						}
+						if (gl::World::MapMarkers)
+						{
+							ShowWorldESP(gl::TP::MapMarkers, MyController, "Marker", gl::esp_Colors::MapMarkers, LocalPos);
+						}
+						if (gl::World::Shops)
+						{
+							ShowWorldESP(gl::TP::MapMarkersShops, MyController, "Shop", gl::esp_Colors::Shops, LocalPos);
+						}
+					}
+
+					if (IndexForWorldESP == 0)
+						IndexForWorldESP = 1;
+
 				}
 
 				if (gl::ESP::ESP)
 				{
 					if (actor->GetName().find("Police") == std::string::npos
-						&& actor->GetName().find("Thug") == std::string::npos) continue;
+						&& actor->GetName().find("Thug") == std::string::npos &&
+						actor->GetName().find("Militia") == std::string::npos) continue;
 
 					auto OponnentClass = reinterpret_cast<SDK::ABP_NPC_OponentBase_C*>(actor);
 
@@ -457,22 +675,25 @@ void GameLoop()
 					{
 						if (actor->GetName().find("Thug") != std::string::npos) continue;
 					}
+					if (!gl::ESP::Militia)
+					{
+						if (actor->GetName().find("Militia") != std::string::npos) continue;
+					}
 
 					if (gl::ESP::ESP_Skeleton)
 					{
-						if (!IsActorVisible)
+						if (actor->GetName().find("Police") != std::string::npos)
 						{
-							if (actor->GetName().find("Police") != std::string::npos)
-							{
-								DrawBones(mesh, MyController, gl::esp_Colors::PoliceColor);
-							}
-							else if (actor->GetName().find("Thug") != std::string::npos)
-							{
-								DrawBones(mesh, MyController, gl::esp_Colors::ThugColor);
-							}
+							DrawBones(mesh, MyController, gl::esp_Colors::PoliceColor);
 						}
-						else
-							DrawBones(mesh, MyController, gl::esp_Colors::Visible);
+						else if (actor->GetName().find("Thug") != std::string::npos)
+						{
+							DrawBones(mesh, MyController, gl::esp_Colors::ThugColor);
+						}
+						else if (actor->GetName().find("Militia") != std::string::npos)
+						{
+							DrawBones(mesh, MyController, gl::esp_Colors::MilitiaColor);
+						}
 					}
 					if (gl::ESP::ESP_Box)
 					{
@@ -485,6 +706,10 @@ void GameLoop()
 							else if (actor->GetName().find("Thug") != std::string::npos)
 							{
 								ESP::DrawBox(Vec2(Top.X - w, Top.Y), Vec2(Bottom.X + w, Bottom.Y), gl::esp_Colors::ThugColor, true);
+							}
+							else if (actor->GetName().find("Militia") != std::string::npos)
+							{
+								ESP::DrawBox(Vec2(Top.X - w, Top.Y), Vec2(Bottom.X + w, Bottom.Y), gl::esp_Colors::MilitiaColor, true);
 							}
 						}
 						else
@@ -503,9 +728,13 @@ void GameLoop()
 						{
 							ESP::DrawText2(Vec2(Middle.X, Middle.Y), gl::esp_Colors::PoliceColor, "Police");
 						}
-						else
+						else if (actor->GetName().find("Thug") != std::string::npos)
 						{
 							ESP::DrawText2(Vec2(Middle.X, Middle.Y), gl::esp_Colors::ThugColor, "Thug");
+						}
+						else if (actor->GetName().find("Militia") != std::string::npos)
+						{
+							ESP::DrawText2(Vec2(Middle.X, Middle.Y), gl::esp_Colors::MilitiaColor, "Militia");
 						}
 						//ESP::DrawText2(Vec2(Top.X - w, Top.Y - 15), Colors::White, actor->GetName().c_str());
 					}
@@ -554,6 +783,9 @@ void GameLoop()
 				}
 			}
 		}
+
+		CheatRunning = false;
+
 		if (closest_actor && gl::Aimbot::Aimbot && GetAsyncKeyState(VK_XBUTTON2))
 		{
 			if (gl::ESP::VisCheck)

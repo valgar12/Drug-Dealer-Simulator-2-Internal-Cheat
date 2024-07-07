@@ -13,6 +13,11 @@ inline SDK::TArray<SDK::AActor*> actors{};
 inline SDK::AActor* actor_list{};
 inline SDK::APlayerController* MyController{};
 inline float aimbot_distance{};
+inline SDK::UBP_ConsoleCommandsComponent_C* ConsoleComponnent;
+inline bool CheatRunning = false;
+inline bool CacheRunning = false;
+inline bool MainCacheRunning = false;
+inline bool FastCacheRunning = false;
 
 enum BoxTypes
 {
@@ -20,6 +25,23 @@ enum BoxTypes
 	Cornered = 1,
 	Box_3D = 2
 };
+
+namespace Colors
+{
+	inline ImColor White(255.f, 255.f, 255.f);
+	inline ImColor Black(0.f, 0.f, 0.f);
+	inline ImColor Red(255.f, 0.f, 0.f);
+	inline ImColor DarkRed(0.700f, 0.f, 0.f);
+	inline ImColor Green(0.f, 255.f, 0.f);
+	inline ImColor DarkGreen(0.f, 0.600f, 0.f);
+	inline ImColor Blue(0.f, 0.f, 255.f);
+	inline ImColor DarkBlue(0.f, 0.f, 0.700f);
+	inline ImColor Pink(255.f, 0.f, 255.f);
+	inline ImColor Cian(0.f, 255.f, 255.f);
+	inline ImColor Yellow(255.f, 255.f, 0.f);
+	inline ImColor Grey(0.600f, 0.600f, 0.600f);
+	inline ImColor Purple(0.200f, 0.f, 0.600f);
+}
 
 struct LocationStruct
 {
@@ -62,13 +84,14 @@ namespace gl
 	namespace ESP
 	{
 		inline bool ESP = true;
-		inline bool ESP_Box = false;
+		inline bool ESP_Box = true;
 		inline bool ESP_CorneredBox = false;
 		inline bool ESP_3DBox = false;
 		inline bool ESP_Snaplines = true;
 		inline bool ESP_Skeleton = true;
 		inline bool ESP_Names = false;
 		inline bool Police = true;
+		inline bool Militia = true;
 		inline bool Thugs = true;
 		inline bool HealthBar = true;
 
@@ -90,15 +113,31 @@ namespace gl
 
 	namespace World
 	{
+		inline int MaxDistance = 300;
+
 		inline bool World = true;
 		inline bool Vehicles = true;
+		inline bool VehiclesAll = false;
 		inline bool Boats = true;
 		inline bool Shops = true;
 		inline bool Influencers = true;
+		inline bool Parkings = false;
+		inline bool BusStops = false;
+		inline bool Dealers = false;
+		inline bool DropBags = true;
+		inline bool HideoutsOwned = true;
+		inline bool HideoutsAll = false;
+		inline bool IntelligenceSpots = false;
+		inline bool ClientSpawn = false;
+		inline bool HideoutsBins = false;
+		inline bool Clients = true;
+		inline bool MapMarkers = false;
 	}
 
 	namespace Exploits
 	{
+		inline int MaxSpeed = 3000.f;
+
 		inline bool InfiniteStamina = false;
 		inline bool SuperSpeed = false;
 		inline bool FastSwim = false;
@@ -109,13 +148,12 @@ namespace gl
 		inline bool NoWeight = false;
 		inline bool UnbreakingWeapons = false;
 		inline bool FastMeleeAtack = false;
+		inline bool IncreeseInteractRange = false;
 		inline bool InfiniteFuel = false;
-		inline bool InstantCraft = false;
 		inline bool SuperFlashlight = false;
 		inline int FlashPower = 1000;
 		inline int FlashRange = 1000;
-		inline SDK::TArray<struct SDK::FInventoryGridData> Inventory;
-		inline SDK::TArray<struct SDK::FInventoryGridData> InventoryTest;
+		inline int MaxPlayers = 3;
 
 		namespace cheats
 		{
@@ -137,6 +175,9 @@ namespace gl
 			inline bool UnlockAllShopOffers = false;
 			inline bool CleanTrashBins = false;
 			inline bool UnlockAllVehicles = false;
+			inline bool StartRaid = false;
+			inline bool ShowCredits = false;
+			inline bool KillAllEntityes = false;
 		}
 	}
 
@@ -148,16 +189,19 @@ namespace gl
 		inline SDK::FInventoryObjectData CurrentItemToSpawn{};
 		inline bool SpawnItem = false;
 
-		inline std::array<SDK::FInventoryObjectData, 6> Drugs{
+		inline std::array<SDK::FInventoryObjectData, 9> Drugs{
 			MakeDrug("DYN-SUBSTANCE-PACK", Stack, "SUBSTANCE-WEED-SAT", GramAmountFloat),
 			MakeDrug("DYN-SUBSTANCE-PACK", Stack, "SUBSTANCE-WEED-IND", GramAmountFloat),
 			MakeDrug("DYN-SUBSTANCE-PACK", Stack, "SUBSTANCE-AMPH", GramAmountFloat),
 			MakeDrug("DYN-SUBSTANCE-PACK", Stack, "SUBSTANCE-OPIUM", GramAmountFloat),
 			MakeDrug("DYN-SUBSTANCE-PACK", Stack, "SUBSTANCE-COCAINE", GramAmountFloat),
-			MakeDrug("DYN-SUBSTANCE-PACK", Stack, "SUBSTANCE-METH", GramAmountFloat)
+			MakeDrug("DYN-SUBSTANCE-PACK", Stack, "SUBSTANCE-MORPHINE", GramAmountFloat),
+			MakeDrug("DYN-SUBSTANCE-PACK", Stack, "SUBSTANCE-LSD", GramAmountFloat),
+			MakeDrug("DYN-SUBSTANCE-PACK", Stack, "SUBSTANCE-BLUE-METH", GramAmountFloat),
+			MakeDrug("DYN-SUBSTANCE-PACK", Stack, "SUBSTANCE-METH", GramAmountFloat),
 		};
 
-		inline std::array<SDK::FInventoryObjectData, 19> Tools{
+		inline std::array<SDK::FInventoryObjectData, 25> Tools{
 			MakeItem("TOOL-COOKING-POT", Stack),
 			MakeItem("TOOL-FLASHLIGHT", Stack),
 			MakeItem("TOOL-FLASHLIGHT-M", Stack),
@@ -169,14 +213,20 @@ namespace gl
 			MakeItem("TOOL-BOLT-CUTTER", Stack),
 			MakeItem("TOOL-WEP-KNIFE-MIL", Stack),
 			MakeItem("TOOL-MACHETE", Stack),
+			MakeItem("TOOL-MACHETE-CUR", Stack),
 			MakeItem("TOOL-FLASHLIGHT-HID", Stack),
 			MakeItem("TOOL-BULB-UV-L", Stack),
 			MakeItem("TOOL-BULB-LED-S", Stack),
+			MakeItem("TOOL-BULB-LED-L", Stack),
 			MakeItem("TOOL-HYDRO", Stack),
 			MakeItem("TOOL-POT", Stack),
 			MakeItem("TOOL-FAN", Stack),
 			MakeItem("TOOL-BULB-LED-L", Stack),
-			MakeItem("TOOL-DISARM-CARD", Stack)
+			MakeItem("TOOL-DISARM-CARD", Stack),
+			MakeItem("TOOL-LOCKPICK", Stack),
+			MakeItem("TOOL-KEYCHAIN", Stack),
+			MakeItem("TOOL-WALKIE-TALKIE", Stack),
+			MakeItem("TOOL-FIRE-EXTINGUISHER", Stack)
 		};
 
 		inline std::array<SDK::FInventoryObjectData, 33> Items{
@@ -260,8 +310,16 @@ namespace gl
 			MakeItem("CLOTH-MILI-SHOES", Stack),
 			MakeItem("CLOTH-MILI-CAP", Stack)
 		};
-		inline std::array<SDK::FInventoryObjectData, 21> Random
+		inline std::array<SDK::FInventoryObjectData, 27> Random
 		{
+			MakeItem("DRUG-WEED-PIPE", Stack),
+			MakeItem("DRUG-OPIUM-PIPE", Stack),
+			MakeItem("DRUG-AMPH-VIAL", Stack),
+			MakeItem("DRUG-COCAINE-VIAL", Stack),
+			MakeItem("DRUG-LSD-BLOTTER-PIECE", Stack),
+			MakeItem("DRUG-METH-VIAL", Stack),
+			MakeItem("DRUG-BLUNT", Stack),
+			MakeItem("DRUG-COOKIE", Stack),
 			MakeItem("MONEY-LOCAL-LARGE", Stack),
 			MakeItem("MONEY-LOCAL-SMALL", Stack),
 			MakeItem("DRINK-BEER", Stack),
@@ -279,8 +337,6 @@ namespace gl
 			MakeItem("PLANT-IND-SAP-F", Stack),
 			MakeItem("PLANT-SAT-SAP-F", Stack),
 			MakeItem("PLANT-SAT-SAP-M", Stack),
-			MakeItem("DRUG-BLUNT", Stack),
-			MakeItem("DRUG-COOKIE", Stack),
 			MakeItem("PLANT-SAT-FLOWER", Stack),
 			MakeItem("PLANT-IND-FLOWER", Stack)
 		};
@@ -320,10 +376,21 @@ namespace gl
 		};
 
 		inline std::vector<SDK::AActor*> MapMarkers{};
+		inline std::vector<SDK::AActor*> MapMarkersShops{};
+		inline std::vector<SDK::AActor*> MapMarkersPartys{};
 		inline std::vector<SDK::AActor*> HideoutBins{};
 		inline std::vector<SDK::AActor*> Hideouts{};
+		inline std::vector<SDK::AActor*> HideoutsOwned{};
 		inline std::vector<SDK::AActor*> OwnedVehicles{};
 		inline std::vector<SDK::AActor*> Vehicles{};
+		inline std::vector<SDK::AActor*> DropBags{};
+		inline std::vector<SDK::AActor*> DealersSpots{};
+		inline std::vector<SDK::AActor*> IntelligenbceSpot{};
+		inline std::vector<SDK::AActor*> BusStops{};
+		inline std::vector<SDK::AActor*> Parkings{};
+		inline std::vector<SDK::AActor*> ClientsSpawnPoints{};
+		inline std::vector<SDK::AActor*> Clients{};
+		inline std::vector<SDK::AActor*> WorkSpots{};
 
 		inline std::string appDataLocalPath{};
 		inline std::string filePath{};
@@ -348,24 +415,30 @@ namespace gl
 		inline ImColor SnaplineColor{ 255.f, 255.f , 255.f };
 		inline ImColor SkeletonColor{ 255.f, 0.f, 0.f };
 		inline ImColor PoliceColor{ 0.f, 0.f, 255.f };
+		inline ImColor MilitiaColor{ 0.f, 255.f, 0.f };
 		inline ImColor ThugColor{ 255.f, 0.f, 0.f };
 		inline ImColor FovColor{ 255.f, 255.f, 255.f };
 		inline ImColor CrosshairColor{ 255.f, 0.f, 0.f };
 		inline ImColor Visible{ 0.f, 255.f, 255.f };
 		inline ImColor NotVisible{ 255.f, 0.f, 0.f };
+
+		inline ImColor Vehicles = Colors::White;
+		inline ImColor Boats = Colors::Pink;
+		inline ImColor Influencers = Colors::Yellow;
+		inline ImColor Parkings = Colors::Grey;
+		inline ImColor BusStops = Colors::DarkRed;
+		inline ImColor Dealers = Colors::DarkBlue;
+		inline ImColor DropBags = Colors::Cian;
+		inline ImColor HideoutsOwned = Colors::Green;
+		inline ImColor HideoutsAll = Colors::Red;
+		inline ImColor IntelligenceSpots = Colors::Purple;
+		inline ImColor ClientSpawn = Colors::DarkGreen;
+		inline ImColor HideoutsBins = Colors::Black;
+		inline ImColor Clients = Colors::Cian;
+		inline ImColor MapMarkers = Colors::White;
+		inline ImColor Shops = Colors::White;
 	}
 }
 
-namespace Colors
-{
-	inline ImColor White(255.f, 255.f, 255.f);
-	inline ImColor Black(0.f, 0.f, 0.f);
-	inline ImColor Red(255.f, 0.f, 0.f);
-	inline ImColor Green(0.f, 255.f, 0.f);
-	inline ImColor Blue(0.f, 0.f, 255.f);
-	inline ImColor Pink(255.f, 0.f, 255.f);
-	inline ImColor Cian(0.f, 255.f, 255.f);
-	inline ImColor Yellow(255.f, 255.f, 0.f);
-}
 
 

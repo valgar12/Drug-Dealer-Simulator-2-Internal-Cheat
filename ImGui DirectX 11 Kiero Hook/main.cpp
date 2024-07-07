@@ -129,6 +129,7 @@ DWORD MainThread(HMODULE hModule)
 
 	std::thread(PlayerCache::PlayerCache).detach();
 	std::thread(ActorsCache::ActorsCache).detach();
+	std::thread(ActorsCacheFast::ActorsCacheFast).detach();
 
 	bool init_hook = false;
 	if (kiero::init(kiero::RenderType::D3D11) == kiero::Status::Success)

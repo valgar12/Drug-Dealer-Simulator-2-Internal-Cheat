@@ -13,6 +13,13 @@ void PlayerCache::PlayerCache()
 
 	while (alive)
 	{
+		while (CheatRunning)
+		{
+			std::this_thread::sleep_for(std::chrono::nanoseconds(1));
+		}
+
+		MainCacheRunning = true;
+
 		PlayerList.clear();
 		ActorList.clear();
 
@@ -25,6 +32,8 @@ void PlayerCache::PlayerCache()
 			actor_list = actors[i];
 
 			if (!actor_list || actor_list == nullptr) continue;
+			if (!actor_list->RootComponent) continue;
+			if (actor_list->RootComponent->RelativeLocation.IsZero()) continue;
 
 			MyController = World->OwningGameInstance->LocalPlayers[0]->PlayerController;
 
@@ -37,6 +46,8 @@ void PlayerCache::PlayerCache()
 
 			PlayerList.push_back(actor_list);
 		}
+
+		MainCacheRunning = false;
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	}
