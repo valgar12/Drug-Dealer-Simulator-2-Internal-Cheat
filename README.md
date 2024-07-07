@@ -25,13 +25,27 @@ https://www.youtube.com/watch?v=DsF6tQR9T9Q&ab_channel=Valgar1
 - Skeleton
 - Thugs
 - Police
+- Militia
 - Visibility Check
 - Health bar
 - Names
 ### -World ESP
 - Vehicles
+- Vehicles All
 - Boats
 - Influencers
+- Shops
+- Parkings
+- Bus Stops
+- Dealers Spots
+- Drop bags
+- Hideouts Owned
+- Hideouts All
+- Intelligence loot spots
+- Clients spawn
+- Hideouts trash bins
+- Clients
+- Map markers
 ### -Aimbot
 - KEY (XBUTTON2)
 - FOV slider
@@ -47,6 +61,8 @@ https://www.youtube.com/watch?v=DsF6tQR9T9Q&ab_channel=Valgar1
 - Fast acceleration
 - No break clothes/weapons/items
 - Fast melee atack
+- Increese interaction range
+- All enemies 0 HP
 - Infinite fuel
 - Super flashlight
 - Set Hour
@@ -67,6 +83,9 @@ https://www.youtube.com/watch?v=DsF6tQR9T9Q&ab_channel=Valgar1
 - Max cartel rep
 - Max street rep
 - Clean all hideouts trash bins
+- Start Raid
+- Show Credits
+- Increese Max Players (1-10)
 ### -Item Spawner
 - Quantity slider
 - Grams slider
@@ -83,9 +102,11 @@ https://www.youtube.com/watch?v=DsF6tQR9T9Q&ab_channel=Valgar1
 # Saved locations saves restarting the cheat / game, C:/Appdata/Local/locations.txt
 - Islands TP
 - Map markers TP
+- Shops TP
+- Partys TP
 - Owned Vehicles TP
-- Owned hideouts TP
-- All hideouts TP
+- Owned Hideouts TP
+- Not Owned Hideouts TP
 ### Misc
 - Show mouse
 - Show FPS
