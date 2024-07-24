@@ -9,84 +9,76 @@
 // FORWARD DECLARATIONS
 
 
-namespace Caustics { struct FCaustics; }
+namespace Global_Displacement { struct FGlobal_Displacement; }
 
-namespace Wave_3 { struct FWave_3; }
+namespace OponentAnim_Policeman { struct FAnimBlueprintGeneratedConstantData; }
+
+namespace Surface_Light_0 { struct FSurface_Light; }
 
 namespace CartelCharacterTooltip_0 { class UCartelCharacterTooltip_C; }
 
 namespace OponentAnim_Militia { struct FAnimBlueprintGeneratedConstantData; }
 
-namespace Foam_Generator_0 { struct FFoam_Generator; }
+namespace Global_Displacement_0 { struct FGlobal_Displacement; }
 
 namespace OponentAnim_KiraWalking { struct FAnimBlueprintGeneratedConstantData; }
 
-namespace Underwater { struct FUnderwater; }
-
-namespace CartelCharacterTooltip { class UCartelCharacterTooltip_C; }
-
-namespace Global_Displacement_0 { struct FGlobal_Displacement; }
-
-namespace GodRays_0 { struct FGodRays; }
-
-namespace Wave_2_0 { struct FWave_2; }
-
-namespace BroJam_AnimBP { struct FAnimBlueprintGeneratedConstantData; }
-
-namespace Wave_4_0 { struct FWave_4; }
+namespace Surface_Light { struct FSurface_Light; }
 
 namespace BaseOffset_0 { struct FBaseOffset; }
 
-namespace OponentAnim_Policeman { struct FAnimBlueprintGeneratedConstantData; }
+namespace Wave_4_0 { struct FWave_4; }
 
-namespace Refraction_0 { struct FRefraction; }
-
-namespace Wave_2 { struct FWave_2; }
-
-namespace OponentAnim_TIMMY { struct FAnimBlueprintGeneratedConstantData; }
-
-namespace RaidHelicopter_AnimBP { struct FAnimBlueprintGeneratedConstantData; }
-
-namespace GodRays { struct FGodRays; }
-
-namespace Global_Displacement { struct FGlobal_Displacement; }
-
-namespace BaseOffset { struct FBaseOffset; }
-
-namespace WorkerSpotAnimBP { struct FAnimBlueprintGeneratedConstantData; }
+namespace GodRays_0 { struct FGodRays; }
 
 namespace Wave_1_0 { struct FWave_1; }
 
-namespace BaseNPC_AnimBP { struct FAnimBlueprintGeneratedConstantData; }
+namespace Wave_3 { struct FWave_3; }
 
-namespace Wave_1 { struct FWave_1; }
+namespace OponentAnim_TIMMY { struct FAnimBlueprintGeneratedConstantData; }
+
+namespace Refraction_0 { struct FRefraction; }
+
+namespace Caustics_0 { struct FCaustics; }
+
+namespace GodRays { struct FGodRays; }
 
 namespace OponentAnim_Thug { struct FAnimBlueprintGeneratedConstantData; }
 
-namespace PrisonerAnimBP { struct FAnimBlueprintGeneratedConstantData; }
+namespace Wave_1 { struct FWave_1; }
+
+namespace Wave_2_0 { struct FWave_2; }
+
+namespace Caustics { struct FCaustics; }
+
+namespace RaidHelicopter_AnimBP { struct FAnimBlueprintGeneratedConstantData; }
+
+namespace Wave_3_0 { struct FWave_3; }
+
+namespace WorkerSpotAnimBP { struct FAnimBlueprintGeneratedConstantData; }
+
+namespace Wave_2 { struct FWave_2; }
+
+namespace BaseNPC_AnimBP { struct FAnimBlueprintGeneratedConstantData; }
 
 namespace Foam_Generator { struct FFoam_Generator; }
+
+namespace BroJam_AnimBP { struct FAnimBlueprintGeneratedConstantData; }
+
+namespace CartelCharacterTooltip { class UCartelCharacterTooltip_C; }
+
+namespace Foam_Generator_0 { struct FFoam_Generator; }
 
 namespace Refraction { struct FRefraction; }
 
 namespace Wave_4 { struct FWave_4; }
 
-namespace Caustics_0 { struct FCaustics; }
+namespace BaseOffset { struct FBaseOffset; }
 
-namespace Surface_Light_0 { struct FSurface_Light; }
+namespace Underwater { struct FUnderwater; }
 
 namespace Underwater_0 { struct FUnderwater; }
 
-namespace Wave_3_0 { struct FWave_3; }
-
-namespace Surface_Light { struct FSurface_Light; }
-
-
-namespace OponentAnimBP
-{
-	struct FAnimBlueprintGeneratedConstantData;
-	struct FAnimBlueprintGeneratedMutableData;
-}
 
 namespace PlayerCharacter_FPBody_AnimBP
 {
@@ -94,8 +86,20 @@ namespace PlayerCharacter_FPBody_AnimBP
 	struct FAnimBlueprintGeneratedConstantData;
 }
 
+namespace OponentAnimBP
+{
+	struct FAnimBlueprintGeneratedConstantData;
+	struct FAnimBlueprintGeneratedMutableData;
+}
+
 namespace PlayerCharacter_AnimBP_UE5
 {
 	struct FAnimBlueprintGeneratedConstantData;
 	struct FAnimBlueprintGeneratedMutableData;
+}
+
+namespace PrisonerAnimBP
+{
+	struct FAnimBlueprintGeneratedMutableData;
+	struct FAnimBlueprintGeneratedConstantData;
 }

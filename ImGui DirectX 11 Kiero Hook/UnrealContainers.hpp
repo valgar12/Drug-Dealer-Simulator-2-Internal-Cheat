@@ -763,7 +763,7 @@ namespace UC
 	template<typename T0, typename T1> inline Iterators::TMapIterator<T0, T1> begin(const TMap<T0, T1>& Map) { return Iterators::TMapIterator<T0, T1>(Map, Map.GetAllocationFlags(), 0); }
 	template<typename T0, typename T1> inline Iterators::TMapIterator<T0, T1> end  (const TMap<T0, T1>& Map) { return Iterators::TMapIterator<T0, T1>(Map, Map.GetAllocationFlags(), Map.NumAllocated()); }
 
-	//(sizeof(TArray<int32>) == 0x10, "TArray has a wrong size!");
-	//(sizeof(TSet<int32>) == 0x50, "TSet has a wrong size!");
-	//(sizeof(TMap<int32, int32>) == 0x50, "TMap has a wrong size!");
+	static_assert(sizeof(TArray<int32>) == 0x10, "TArray has a wrong size!");
+	static_assert(sizeof(TSet<int32>) == 0x50, "TSet has a wrong size!");
+	static_assert(sizeof(TMap<int32, int32>) == 0x50, "TMap has a wrong size!");
 }

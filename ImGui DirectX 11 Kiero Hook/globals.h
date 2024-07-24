@@ -18,6 +18,8 @@ inline bool CheatRunning = false;
 inline bool CacheRunning = false;
 inline bool MainCacheRunning = false;
 inline bool FastCacheRunning = false;
+inline SDK::UMaterial* WireframeMaterial{};
+inline SDK::UMaterialInstanceDynamic* ChamsMat{};
 
 enum BoxTypes
 {
@@ -130,7 +132,7 @@ namespace gl
 		inline bool IntelligenceSpots = false;
 		inline bool ClientSpawn = false;
 		inline bool HideoutsBins = false;
-		inline bool Clients = true;
+		inline bool Clients = false;
 		inline bool MapMarkers = false;
 	}
 
@@ -138,19 +140,19 @@ namespace gl
 	{
 		inline int MaxSpeed = 3000.f;
 
-		inline bool InfiniteStamina = false;
-		inline bool SuperSpeed = false;
-		inline bool FastSwim = false;
-		inline bool FastFly = false;
-		inline bool GodMode = false;
-		inline bool SuperJump = false;
-		inline bool FastAcceleration = false;
-		inline bool NoWeight = false;
-		inline bool UnbreakingWeapons = false;
-		inline bool FastMeleeAtack = false;
-		inline bool IncreeseInteractRange = false;
-		inline bool InfiniteFuel = false;
-		inline bool SuperFlashlight = false;
+		inline bool InfiniteStamina = true;
+		inline bool SuperSpeed = true;
+		inline bool FastSwim = true;
+		inline bool FastFly = true;
+		inline bool GodMode = true;
+		inline bool SuperJump = true;
+		inline bool FastAcceleration = true;
+		inline bool NoWeight = true;
+		inline bool UnbreakingWeapons = true;
+		inline bool FastMeleeAtack = true;
+		inline bool IncreeseInteractRange = true;
+		inline bool InfiniteFuel = true;
+		inline bool SuperFlashlight = true;
 		inline int FlashPower = 1000;
 		inline int FlashRange = 1000;
 		inline int MaxPlayers = 3;
@@ -229,7 +231,7 @@ namespace gl
 			MakeItem("TOOL-FIRE-EXTINGUISHER", Stack)
 		};
 
-		inline std::array<SDK::FInventoryObjectData, 33> Items{
+		inline std::array<SDK::FInventoryObjectData, 41> Items{
 			MakeItem("ITEM-WATER-S", Stack),
 			MakeItem("ITEM-WATER-L", Stack),
 			MakeItem("ITEM-SUGAR-M", Stack),
@@ -255,7 +257,15 @@ namespace gl
 			MakeItem("ITEM-GAS-CANISTER-L", Stack),
 			MakeItem("ITEM-METAL-PARTS", Stack),
 			MakeItem("ITEM-STASH-MED", Stack),
+			MakeItem("ITEM-STASH-ELEC", Stack),
+			MakeItem("ITEM-ELEC-PARTS", Stack),
 			MakeItem("ITEM-ELEC-WIRES", Stack),
+			MakeItem("ITEM-MIL-TNT", Stack),
+			MakeItem("ITEM-BOMB-QUEST", Stack),
+			MakeItem("ITEM-NAV-CONTROL", Stack),
+			MakeItem("ITEM-GAS-MASK", Stack),
+			MakeItem("ITEM-MORPH-BOX", Stack),
+			MakeItem("ITEM-STASH-BOMB", Stack),
 			MakeItem("ITEM-VIAL", Stack),
 			MakeItem("ITEM-GLASS-PIPE", Stack),
 			MakeItem("ITEM-FIRECRACKER", Stack),
@@ -391,6 +401,7 @@ namespace gl
 		inline std::vector<SDK::AActor*> ClientsSpawnPoints{};
 		inline std::vector<SDK::AActor*> Clients{};
 		inline std::vector<SDK::AActor*> WorkSpots{};
+		inline std::vector<SDK::AActor*> Random{};
 
 		inline std::string appDataLocalPath{};
 		inline std::string filePath{};

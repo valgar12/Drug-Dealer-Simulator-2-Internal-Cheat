@@ -17,6 +17,7 @@ void ActorsCacheFast::ActorsCacheFast()
 		gl::TP::DropBags.clear();
 		gl::TP::Clients.clear();
 		gl::TP::WorkSpots.clear();
+		gl::TP::Random.clear();
 
 		actors = World->PersistentLevel->Actors;
 
@@ -28,24 +29,25 @@ void ActorsCacheFast::ActorsCacheFast()
 
 			SDK::AActor* actor = actors[i];
 
-			if (!actor->RootComponent) continue;
-			if (actor->RootComponent->RelativeLocation.IsZero()) continue;
+		/*	if (!actor->RootComponent) continue;
+			if (actor->RootComponent->RelativeLocation.IsZero()) continue;*/
 
 			if (actor->GetName().find("DropBag") != std::string::npos)
 			{
 				gl::TP::DropBags.push_back(actor);
 				continue;
 			}
-			if (actor->GetName().find("NPCCustomBodyMaster") != std::string::npos)
+			if (actor->GetName().find("BodyMaster") != std::string::npos)
 			{
 				gl::TP::Clients.push_back(actor);
 				continue;
 			}
-			if (actor->GetName().find("WorkerClientSpot") != std::string::npos)
+			if (actor->GetName().find("ClientSpot") != std::string::npos)
 			{
 				gl::TP::WorkSpots.push_back(actor);
 				continue;
 			}
+			
 		}
 
 		FastCacheRunning = false;

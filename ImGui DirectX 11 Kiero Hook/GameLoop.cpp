@@ -55,7 +55,7 @@ void ShowWorldESP(std::vector<SDK::AActor*>& ActorsVector, SDK::APlayerControlle
 
 									auto DistanceToDealer = DealerLocation.GetDistanceToInMeters(SpotLocation);
 
-									if (DistanceToDealer <= 20)
+									if (DistanceToDealer <= 12)
 									{
 										Draw = true;
 										break;

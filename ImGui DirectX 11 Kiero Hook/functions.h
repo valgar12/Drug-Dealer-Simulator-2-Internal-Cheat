@@ -202,6 +202,10 @@ inline std::string GetInfluencerName(const std::string& input) {
     return nombre;
 }
 
+inline SDK::FLinearColor ImColorToFLinearColor(ImColor color)
+{
+    return SDK::FLinearColor{ color.Value.x, color.Value.y, color.Value.z };
+}
 
 
 

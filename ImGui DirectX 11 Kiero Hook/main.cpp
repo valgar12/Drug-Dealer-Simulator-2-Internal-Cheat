@@ -11,6 +11,7 @@ ID3D11RenderTargetView* mainRenderTargetView;
 
 bool FirstInject = true;
 bool debug = false;
+bool EnableExploits = false;
 FILE* Dummy{};
 
 void InitImGui()
@@ -125,6 +126,41 @@ DWORD MainThread(HMODULE hModule)
 	for (Locations::Location loc : Locs)
 	{
 		Locations::LocationsReaded.push_back(loc);
+	}
+
+	if (EnableExploits)
+	{
+		gl::Exploits::InfiniteStamina = true;
+		gl::Exploits::SuperSpeed = true;
+		gl::Exploits::FastSwim = true;
+		gl::Exploits::FastFly = true;
+		gl::Exploits::GodMode = true;
+		gl::Exploits::SuperJump = true;
+		gl::Exploits::FastAcceleration = true;
+		gl::Exploits::NoWeight = true;
+		gl::Exploits::UnbreakingWeapons = true;
+		gl::Exploits::FastMeleeAtack = true;
+		gl::Exploits::IncreeseInteractRange = true;
+		gl::Exploits::InfiniteFuel = true;
+		gl::Exploits::SuperFlashlight = true;
+		gl::Exploits::cheats::KillAllEntityes = true;
+	}
+	else
+	{
+		gl::Exploits::InfiniteStamina = false;
+		gl::Exploits::SuperSpeed = false;
+		gl::Exploits::FastSwim = false;
+		gl::Exploits::FastFly = false;
+		gl::Exploits::GodMode = false;
+		gl::Exploits::SuperJump = false;
+		gl::Exploits::FastAcceleration = false;
+		gl::Exploits::NoWeight = false;
+		gl::Exploits::UnbreakingWeapons = false;
+		gl::Exploits::FastMeleeAtack = false;
+		gl::Exploits::IncreeseInteractRange = false;
+		gl::Exploits::InfiniteFuel = false;
+		gl::Exploits::SuperFlashlight = false;
+		gl::Exploits::cheats::KillAllEntityes = false;
 	}
 
 	std::thread(PlayerCache::PlayerCache).detach();
